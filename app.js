@@ -87,9 +87,9 @@ function displayScreenLower (value) {
 let numStr = ""
 function numKeyHandler(keyPressed) {
     if (numStr.length > 0 && Number(numStr[0]) !== 0) {
-        numStr += keyPressed.value;
+        numStr += keyPressed;
     } else {
-        numStr = keyPressed.value;
+        numStr = keyPressed;
     }
     displayScreenLower(numStr);
 }    
@@ -115,20 +115,21 @@ function symbolKeyHandler(keyPressed) {
             numStr = '';
         }   
     if (operationStack.length === 2) {
-        if (keyPressed.className === "symbol-keys") {
-            operationStack[1] = keyPressed.value;
-        } 
+        // if (keyPressed.className === "symbol-keys") {
+        //     operationStack[1] = keyPressed;
+        // } 
+        operationStack[1] = keyPressed;
         displayScreenUpper(operationStack);
     } else if (operationStack.length === 3) {
             // console.log(operationStack)
             let currentValue = operate(operationStack[1], operationStack[0], operationStack[2]);
             if (currentValue) {
-                if (keyPressed.id === "equal") {
+                if (keyPressed === "=") {
                     displayScreenUpper(operationStack);            
                     operationStack = [currentValue];    
                     displayScreenLower(currentValue);        
                 } else {
-                    operationStack = [currentValue, keyPressed.value];      
+                    operationStack = [currentValue, keyPressed];      
                     displayScreenUpper(operationStack);         
                 }
                 countOperation += 1;
@@ -138,7 +139,7 @@ function symbolKeyHandler(keyPressed) {
                    
     } else {
         if(checkSymbol()) {
-            operationStack.push(keyPressed.value);
+            operationStack.push(keyPressed);
             displayScreenUpper(operationStack);
         }
            
@@ -165,68 +166,82 @@ function deleteFromStack() {
 
 
 keyDivide.addEventListener('click', (e) => {
-    symbolKeyHandler(e.target);
+    symbolKeyHandler(e.target.value);
 })
 
 keyMultiply.addEventListener('click', (e) => {
-    symbolKeyHandler(e.target);
+    symbolKeyHandler(e.target.value);
 })
 
 keySubstract.addEventListener('click', (e) => {
-    symbolKeyHandler(e.target);
+    symbolKeyHandler(e.target.value);
 })
 
 keyAdd.addEventListener('click', (e) => {
-    symbolKeyHandler(e.target);
+    symbolKeyHandler(e.target.value);
 })
 
 keyEqual.addEventListener('click', (e) => {
-    symbolKeyHandler(e.target);
+    symbolKeyHandler(e.target.value);
 })
 
 
 keyDecimal.addEventListener("click", decimalHandler);
 
 keyNum9.addEventListener('click', (e) => {
-    numKeyHandler(e.target);
+    numKeyHandler(e.target.value);
 })
 
 keyNum8.addEventListener('click', (e) => {
-    numKeyHandler(e.target);
+    numKeyHandler(e.target.value);
 })
 
 keyNum7.addEventListener('click', (e) => {
-    numKeyHandler(e.target);
+    numKeyHandler(e.target.value);
 })
 
 keyNum6.addEventListener('click', (e) => {
-    numKeyHandler(e.target);
+    numKeyHandler(e.target.value);
 })
 
 keyNum5.addEventListener('click', (e) => {
-    numKeyHandler(e.target);
+    numKeyHandler(e.target.value);
 })
 
 keyNum4.addEventListener('click', (e) => {
-    numKeyHandler(e.target);
+    numKeyHandler(e.target.value);
 })
 
 keyNum3.addEventListener('click', (e) => {
-    numKeyHandler(e.target);
+    numKeyHandler(e.target.value);
 })
 
 keyNum2.addEventListener('click', (e) => {
-    numKeyHandler(e.target);
+    numKeyHandler(e.target.value);
 })
 
 keyNum1.addEventListener('click', (e) => {
-    numKeyHandler(e.target);
+    numKeyHandler(e.target.value);
 })
 
 keyNum0.addEventListener('click', (e) => {
-    numKeyHandler(e.target);
+    numKeyHandler(e.target.value);
 })
 
 
 keyClear.addEventListener("click", clear);
 keyDelete.addEventListener("click", deleteFromStack);
+
+symbolsArr = ['+', '-', '*', '/', '='];
+
+document.addEventListener('keypress', (event) => {
+    var name = event.key;
+    var code = event.code;
+
+    // alert(`key pressed ${name}, code: ${code}`);
+    if (Number(name)) {
+        numKeyHandler(name);
+    } else if (symbolsArr.includes(name)) {
+        symbolKeyHandler(name);
+    }
+})

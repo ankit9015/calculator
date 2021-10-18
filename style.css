@@ -1,11 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
+
 * {
     padding: 0%;
     margin: 0%;
+    box-sizing: border-box;
 }
 
 :root {
     --keys-symbol-bgcolor: blue;
-    --keys-num-bgcolor: green; 
+    --keys-num-bgcolor: #e66e49;
+    --keys-symbol-bgcolor: #6A38B3;
+    --screen-bgcolor: rgb(218, 208, 208);
+    --keys-font-color: white;
+    --frame-bgcolor: rgb(85, 142, 113);
 }
 
 .calculator-frame {
@@ -13,9 +20,9 @@
     height: 75vmin;
     min-width: 300px;
     min-height: 500px;
-    background-color: gray;
-    margin: 10% auto;
-    border: 10px solid blue;
+    background-color: var(--frame-bgcolor);
+    margin: 2rem auto;
+    border: 10px solid rgb(86, 86, 117);
 
 }
 
@@ -23,7 +30,7 @@
     width: 90%;
     height: 20%;
     margin: 5% auto 10%;
-    background-color: rgb(196, 39, 39);
+    background-color: var(--screen-bgcolor);
     border: 5px solid rgb(71, 54, 54);
 }
 
@@ -37,7 +44,6 @@
 .key-layer {
     height: 10%;
     width: 90%;
-    background-color: pink;
     margin: 5% auto;
     display: flex;
     flex-direction: row;
@@ -50,21 +56,56 @@
     padding: 1rem 1.2rem;
     border-radius: 50%;
     font-size: 1.1rem;
+    background-color: var(--keys-num-bgcolor);
+    color: var(--keys-font-color);
+    font-weight: bold;
 }
 
 #decimal {
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: bolder;
 }
 
 .symbol-keys {
     font-size: 1.1rem;
     padding: 1rem 1.5rem;
     border-radius: 40%;
+    background-color: var(--keys-symbol-bgcolor);
+    color: var(--keys-font-color);
+    font-weight: bold;
 }
 
 #clear,
 #delete {
     padding: 1rem 2rem;
     border-radius: 5rem;
+    background-color: rgb(23, 83, 157);
+    color: white;
+    font-weight: bold;
 }
+
+
+
+
+
+
+
+h1 {
+    color: var(--frame-bgcolor);
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-top: 2rem;
+    font-family: 'Dancing Script', cursive;
+}
+
+footer p {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 2rem;
+    color: var(--frame-bgcolor);
+}
+
+
+
