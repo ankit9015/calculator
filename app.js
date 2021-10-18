@@ -1,5 +1,5 @@
-const screenUpper = document.querySelector(".screen-upper");
-const screenLower = document.querySelector(".screen-lower");
+const screenUpper = document.querySelector("#screen-upper");
+const screenLower = document.querySelector("#screen-lower");
 
 const keyClear = document.querySelector("#clear");
 const keyDelete = document.querySelector("#delete");
@@ -41,7 +41,11 @@ function multiply(x, y) {
 function operate(operator, x, y) {
     let z;
     if (operator === "/") {
-        z = divide(x, y);
+        if (Number(y) === 0) {
+            alert("You can not divide by 0!");
+        } else {
+            z = divide(x, y);
+        }        
     } else if (operator  === "*") {
         z = multiply(x, y);
     } else if (operator === "+") {
@@ -49,27 +53,26 @@ function operate(operator, x, y) {
     } else {
         z = substract(x, y)
     }
-    
-    console.log("ans", z);
+    z = +z.toFixed(5)
     return z;
 }
 
+
 let operationStack = [];
 screenLower.innerText = 0;
+let countOperation = 0
 
-// function displayScreenUpper (value) {
-//     // console.log(screenUpper.value);
-//     if (screenUpper.hasChildNodes()) {
-//         screenUpper.innerText += ` ${value}`;
-//     } else {
-//         screenUpper.innerText = value;
-//     }
-    
-// }
+
+function fillOperationStack(value) {
+    if (operationStack.length === 0 || operationStack.length === 2) {
+        operationStack.push(Number(value));
+    } else {
+        operationStack.push(String(value));
+    }
+}
 
 function displayScreenUpper(arr) {
     screenUpper.innerText = arr.join(" ");
-    console.log("up", arr.join(" "));
     displayScreenLower(0);
 }
 
@@ -77,55 +80,88 @@ function displayScreenLower (value) {
     screenLower.innerText = value;
 }
 
+
+
+
+
 let numStr = ""
 function numKeyHandler(keyPressed) {
-    if (numStr.length > 0) {
+    if (numStr.length > 0 && Number(numStr[0]) !== 0) {
         numStr += keyPressed.value;
     } else {
         numStr = keyPressed.value;
     }
     displayScreenLower(numStr);
 }    
-          
+
+function decimalHandler() {
+    
+    if (!numStr.includes(".")) {
+        numStr += ".";
+    }
+}
+   
+function checkSymbol() {
+     if (operationStack.length === 0 && countOperation ===0) {
+         return false;
+     }
+     return true;
+}
 
 function symbolKeyHandler(keyPressed) {
-    if (numStr.length) {
-        operationStack.push(numStr);
-        numStr = '';
-    }
-    console.log()
-    console.log("check", operationStack);
-    // displayScreenUpper(keyPressed.value);
-    if (operationStack.length === 3) {
+        if (numStr.length) {
+            console.log(operationStack);
+            fillOperationStack(numStr);
+            numStr = '';
+        }   
+    if (operationStack.length === 2) {
         if (keyPressed.className === "symbol-keys") {
-            console.log("inside");
             operationStack[1] = keyPressed.value;
-        } else {
-            let currentValue = operate(operationStack[1], operationStack[0], operationStack[2]);
-            if (keyPressed.id === "equal") {
-                displayScreenUpper(operationStack);            
-                operationStack = [currentValue];
-                console.log("here");              
-            } else {
-                operationStack = [currentValue, keyPressed.value];               
-            }
-            displayScreenLower(currentValue);
-        }
-
-        
-    } else {
-        operationStack.push(keyPressed.value);
+        } 
         displayScreenUpper(operationStack);
-    }
+    } else if (operationStack.length === 3) {
+            // console.log(operationStack)
+            let currentValue = operate(operationStack[1], operationStack[0], operationStack[2]);
+            if (currentValue) {
+                if (keyPressed.id === "equal") {
+                    displayScreenUpper(operationStack);            
+                    operationStack = [currentValue];    
+                    displayScreenLower(currentValue);        
+                } else {
+                    operationStack = [currentValue, keyPressed.value];      
+                    displayScreenUpper(operationStack);         
+                }
+                countOperation += 1;
+            } else {
+                clear()
+            }
+                   
+    } else {
+        if(checkSymbol()) {
+            operationStack.push(keyPressed.value);
+            displayScreenUpper(operationStack);
+        }
+           
 
-    
+    }
 
     console.log(operationStack);   
 }
 
 // add constraints for symbols on 1st and last array position
 
+function clear() {
+    operationStack = [];
+    displayScreenUpper(operationStack);
+    numStr = "";
+    countOperation = 0;
+}
 
+function deleteFromStack() {
+    numStr = numStr.slice(0, -1);
+    displayScreenLower(numStr);
+    console.log(operationStack);
+}
 
 
 keyDivide.addEventListener('click', (e) => {
@@ -149,6 +185,7 @@ keyEqual.addEventListener('click', (e) => {
 })
 
 
+keyDecimal.addEventListener("click", decimalHandler);
 
 keyNum9.addEventListener('click', (e) => {
     numKeyHandler(e.target);
@@ -189,3 +226,7 @@ keyNum1.addEventListener('click', (e) => {
 keyNum0.addEventListener('click', (e) => {
     numKeyHandler(e.target);
 })
+
+
+keyClear.addEventListener("click", clear);
+keyDelete.addEventListener("click", deleteFromStack);
